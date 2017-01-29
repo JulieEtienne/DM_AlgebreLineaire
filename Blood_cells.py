@@ -36,6 +36,9 @@ class Blood_cells :
         print("\n Matrice V : \n", self.V)
         self.lambda_ = res[2]
         print("\n Matrice lambda : \n", self.lambda_)
+        #Eigenvectors of M
+        self.eig_M = self.eigenvectors_M()
+        print("\n Eigenvectors of M : \n", self.eig_M)
 
 
     #Imports data
@@ -135,17 +138,16 @@ class Blood_cells :
 
         #Sorts the eigenvectors and their associated eigenvalue by decreasing order
         idx = eigenvalues.argsort()[::-1]
+        #Valeurs propres ordonnées
         eigenvalues = eigenvalues[idx]
         #Matrice V : composées des eigenvectors
         V = eigenvectors[:,idx]
-        print("\n Ordonnés : \n Valeurs : \n", eigenvalues, "\n Vecteurs : \n", eigenvectors)
 
         #Matrice lambda : eigenvalues sur la diagonale
         l = len(eigenvalues)
         lambda_ = np.zeros((l,l))
         for i in range(l) :
             lambda_[i, i] = eigenvalues[i]
-        print("Matrice lambda : \n", lambda_)
 
         #Compute
         M_s_decomp = np.dot(np.dot(V, lambda_),np.linalg.inv(V))
@@ -155,6 +157,8 @@ class Blood_cells :
     #Computes the eigenvectors of M
     def eigenvectors_M(self) :
         eig_M = self.V
-        for i in range(n) :
-            for j in range(n) :
-                eig_M[i, j] = self.V[i,j] / np.pow(self.D[j,j], 1/2)
+        for i in range(self.n) :
+            for j in range(self.n) :
+                eig_M[i, j] = self.V[i,j] / (self.D[j,j]**(1/2))
+
+        return eig_M
